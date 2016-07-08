@@ -1,0 +1,87 @@
+//  并查集在解决一些社交问题上非常使用
+
+#pragma once 
+
+class UnionFindSet
+{
+public:
+	UnionFindSet(size_t n)  
+		:_n(n)
+		, _set(new int[n])
+	{
+		for (int i = 0; i < n; ++i)
+		{
+			_set[i] = -1;
+		}
+	}
+
+	void Union(int root1, int root2)  // 合并
+	{
+		assert(_set[root1] < 0);
+		assert(_set[root2] < 0);
+
+		_set[root1] += _set[root2]; // 将root2上的关系加到root1上
+		_set[root2] = root1; // root2存root1的下标，以便找到root1
+	}
+
+	size_t FindRoot(int child)  // 寻找根
+	{
+		int root = child;
+
+		while (_set[root] >= 0)
+		{
+			root = _set[root]; 
+		}
+
+		return root;
+	}
+
+	void Print()
+	{
+		for (size_t i = 0; i < _n; ++i)
+		{
+			cout << _set[i] << " ";
+		}
+		cout << endl;
+	}
+
+protected:
+	int *_set;
+	size_t _n;
+};
+
+void TestUnionSet()
+{
+	UnionFindSet ufs(10);
+
+	ufs.Union(0, 6);
+	ufs.Union(0, 7);
+	ufs.Union(0, 8);
+
+	ufs.Union(1, 4);
+	ufs.Union(1, 9);
+
+	ufs.Union(2, 3);
+	ufs.Union(2, 5);
+
+	ufs.Print();
+}
+
+// 以  0，6，7，8
+//     1，4，9
+//     2，3，5
+//这三个圈子集合为例，找出三个集合之间的关系和联系
+
+#include <iostream>
+using namespace std;
+#include <assert.h>
+
+#include "UnionFindSet.h"
+
+int main()
+{
+	TestUnionSet();
+
+	system("pause");
+	return 0;
+}
